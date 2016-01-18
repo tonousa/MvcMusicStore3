@@ -6,7 +6,7 @@ using System.Data.Entity;
 
 namespace MvcMusicStore3.Models
 {
-    public class MusicStoredEntities : DbContext
+    public class MusicStoreEntities : DbContext
     {
         public DbSet<Album> Albums { get; set; }
         public DbSet<Genre> Genres { get; set; }
