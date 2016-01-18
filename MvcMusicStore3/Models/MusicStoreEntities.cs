@@ -8,7 +8,8 @@ namespace MvcMusicStore3.Models
 {
     public class MusicStoreEntities : DbContext
     {
-        public MusicStoreEntities() : base("MusicStore") { }
+        //public MusicStoreEntities() : base("MusicStore") { }
+        public MusicStoreEntities() : base("MvcMusicStore") { }
         public DbSet<Album> Albums { get; set; }
         public DbSet<Genre> Genres { get; set; }
 
