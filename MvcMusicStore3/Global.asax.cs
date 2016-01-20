@@ -20,9 +20,9 @@ namespace MvcMusicStore3
             WebSecurity.InitializeDatabaseConnection("DefaultConnection",
                 "UserName", "UserId", "UserName", true);
 
-            WebSecurity.CreateUserAndAccount("admin", "admin");
-            Roles.CreateRole("Administrator");
-            Roles.AddUserToRole("admin", "Administrator");
+            //WebSecurity.CreateUserAndAccount("admin", "admin");
+            //Roles.CreateRole("Administrator");
+            //Roles.AddUserToRole("admin", "Administrator");
 
             System.Data.Entity.Database.SetInitializer(
                 new MvcMusicStore3.Models.SampleData());
