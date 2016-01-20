@@ -6,6 +6,8 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.Optimization;
+using WebMatrix.WebData;
+using System.Web.Security;
 
 namespace MvcMusicStore3
 {
@@ -15,6 +17,13 @@ namespace MvcMusicStore3
     {
         protected void Application_Start()
         {
+            WebSecurity.InitializeDatabaseConnection("DefaultConnection",
+                "UserName", "UserId", "UserName", true);
+
+            WebSecurity.CreateUserAndAccount("admin", "admin");
+            Roles.CreateRole("Administrator");
+            Roles.AddUserToRole("admin", "Administrator");
+
             System.Data.Entity.Database.SetInitializer(
                 new MvcMusicStore3.Models.SampleData());
 
