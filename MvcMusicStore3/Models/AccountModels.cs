@@ -6,7 +6,6 @@ using System.Web.Mvc;
 using System.Web.Security;
 using CompareAttribute = System.Web.Mvc.CompareAttribute;
 
-//namespace Mvc3ToolsUpdateWeb_Default.Models
 namespace MvcMusicStore3.Models
 {
 
