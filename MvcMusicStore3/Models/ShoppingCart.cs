@@ -111,8 +111,77 @@ namespace MvcMusicStore3.Models
         public decimal GetTotal()
         {
             // Multiply album price by count of that album to get
-            // 
+            // the current price for each of those albmus in the cart
+            // sum all album price totals to the cart total
+            decimal? total = (from cartItems in storeDB.Carts
+                              where cartItems.CartId == ShoppingCartId
+                              select (int?)cartItems.Count *
+                              cartItems.Album.Price).Sum();
+            return total ?? decimal.Zero;
         }
 
+        public int CreateOrder(Order order)
+        {
+            decimal  orderTotal = 0;
+
+            var cartItems = GetCartItems();
+            // Itereate over the items in the cart;
+            // adding the order details for each
+            foreach (var item in cartItems)
+            {
+                var orderDetail = new OrderDetail
+                {
+                    AlbumId = item.AlbumId,
+                    OrderId = order.OrderId,
+                    UnitPrice = item.Album.Price,
+                    Quantity = item.Count
+                };
+                // Set the order total of the shopping cart
+                orderTotal += (item.Count * item.Album.Price);
+
+                storeDB.OrderDetails.Add(orderDetail);
+            }
+            // Set the order's total to the orderTotal count
+            order.Total = orderTotal;
+
+            // Save the order
+            storeDB.SaveChanges();
+            // Empty the shopping cart
+            EmptyCart();
+            // Return the OrderId as the confirmation number
+            return order.OrderId;
+        }
+
+        // We're using HttpContextBase to allow access to cookies
+        public string GetCartId(HttpContextBase context)
+        {
+            if (context.Session[CartSessionKey] == null)
+            {
+                if (!string.IsNullOrWhiteSpace(context.User.Identity.Name)) {
+                    context.Session[CartSessionKey] = context.User.Identity.Name;
+                }
+            }
+            else
+            {
+                // Generate a new random GUID using 
+                Guid tempCartId = Guid.NewGuid();
+                // Send tempCartId back to client as a cookie
+                context.Session[CartSessionKey] = tempCartId.ToString();
+            }
+            return context.Session[CartSessionKey].ToString();
+        }
+
+        // When a user has logged in, migrate their shopping cart to
+        // be associated with his user name
+        public void MigrateCart(string userName)
+        {
+            var shoppingCart = storeDB.Carts.Where(
+                c => c.CartId == ShoppingCartId);
+            foreach (var item in shoppingCart)
+            {
+                item.CartId = userName;
+            }
+            storeDB.SaveChanges();
+        }
     }
 }
