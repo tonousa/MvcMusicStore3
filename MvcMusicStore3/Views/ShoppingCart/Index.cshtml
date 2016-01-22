@@ -1,0 +1,66 @@
+﻿@model MvcMusicStore3.ViewModels.ShoppingCartViewModel
+
+@{
+    ViewBag.Title = "Shopping Cart";
+}
+
+<script src="/Scripts/jquery-1.4.4.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function ()
+    {
+        // Document.Ready -> link up remove event handler
+        $(".RemoveLink").click(function () {
+            // Get the id from the link
+            var recordToDelete = $(this).att("data-id");
+            if (recordToDelete != '')
+            {
+                // Perform the ajax post
+                $.post("/ShoppiongCart/RemoveFromCart", {"id": recordToDelet},
+                    function (data) {
+                        // Succesful requests get here
+                        // Update the page elements
+                        if (data.ItemCount == 0)
+                        {
+                            $('#row-' + data.DeleteId).fadeOut('slow');
+                        }
+                        else
+                        {
+                            $('#item-count-') + data.DeleteId.text(data.ItemCount);
+                        }
+                        $('#cart-total').text(data.CartTotal);
+                        $('#update-message').text(data.Message);
+                        $('#cart-status').text('Cart (' + data.CartCount + ')');
+                    });
+            }
+        });
+    });
+</script>
+
+<h3><em>Review</em> your cart:</h3>
+
+<p class="button">
+    @Html.ActionLink("Checkout>>", "AddressAndPayment", "Checkout")
+</p>
+<divi=""></divi="">
+<table>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CartTotal)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CartTotal)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>
