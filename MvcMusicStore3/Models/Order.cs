@@ -39,10 +39,12 @@ namespace MvcMusicStore3.Models
         [Required(ErrorMessage="Phone is required")]
         [StringLength(24)]
         public string Phone { get; set; }
+
+        //[RegularExpression(@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}",
+        //    ErrorMessage = "Email not valid")]
+        [EmailAddress]
         [Required(ErrorMessage="Email required")]
         [DisplayName("Email Address")]
-        [RegularExpression(@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}", 
-            ErrorMessage="Email not valid")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         [ScaffoldColumn(false)]
